@@ -1,0 +1,36 @@
+mode: deployment
+
+config:
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+        # You can specify the endpoint or leave it as default
+        http:
+        # You can specify the endpoint or leave it as default
+  processors:
+    batch:
+    # Include other processors as necessary
+
+  exporters:
+    prometheus:
+      endpoint: "prometheus:9090"
+    logging:
+      loglevel: debug
+    otlp:
+      endpoint: "tempo:4317"
+
+  service:
+    pipelines:
+      traces:
+        receivers: [otlp]
+        processors: [batch]
+        exporters: [otlp]
+      metrics:
+        receivers: [otlp]
+        processors: [batch]
+        exporters: [prometheus]
+      logs:
+        receivers: [otlp]
+        processors: [batch]
+        exporters: [logging]
