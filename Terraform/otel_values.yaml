@@ -4,33 +4,58 @@ config:
   receivers:
     otlp:
       protocols:
-        grpc:
-        # You can specify the endpoint or leave it as default
-        http:
-        # You can specify the endpoint or leave it as default
+        grpc: {}
+        http: {}
+    prometheus:
+      config:
+        scrape_configs:
+          - job_name: 'otel-collector'
+            scrape_interval: 10s
+            static_configs:
+              - targets: [ '0.0.0.0:8888' ]
+
   processors:
-    batch:
-    # Include other processors as necessary
+    batch: {}
+    attributes:
+      actions:
+        - action: insert
+          key: loki.attribute.labels
+          value: container
+        - action: insert
+          key: loki.format
+          value: raw
 
   exporters:
-    prometheus:
-      endpoint: "prometheus:9090"
+    prometheusremotewrite:
+      endpoint: "prometheus-server.prometheus.svc.cluster.local:80"
     logging:
       loglevel: debug
     otlp:
-      endpoint: "tempo:4317"
+      endpoint: "tempo-distributor.tempo.svc.cluster.local:4317"
+      tls:
+        insecure: true
+    loki:
+      endpoint: "loki-gateway.loki.svc.cluster.local:3100/loki/api/v1/push"
+      tls:
+        insecure: true  # Set to true if Loki uses an insecure connection (HTTP)
 
   service:
+    telemetry:
+      logs:
+        level: "debug"
+      metrics:
+        address: ":8888"
     pipelines:
       traces:
         receivers: [otlp]
         processors: [batch]
-        exporters: [otlp]
+        exporters: [logging, otlp]
       metrics:
-        receivers: [otlp]
+        receivers: [prometheus]
         processors: [batch]
-        exporters: [prometheus]
+        exporters: [logging, prometheusremotewrite]
       logs:
         receivers: [otlp]
-        processors: [batch]
-        exporters: [logging]
+        processors: [batch, attributes]
+        exporters: [logging, loki]
+

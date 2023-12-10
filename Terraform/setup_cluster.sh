@@ -17,29 +17,49 @@ handle_installation_error() {
     fi
 }
 
+# Create namespaces
+kubectl create namespace loki
+kubectl create namespace tempo
+kubectl create namespace prometheus
+kubectl create namespace otel
+
 # Add Helm repositories and update
 echo "Adding Helm repositories..."
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 
-# Install kube-prometheus
-echo "Installing kube-prometheus..."
-helm install -n monitoring kube-prometheus prometheus-community/kube-prometheus-stack --create-namespace
-handle_installation_error "kube-prometheus"
+# Install prometheus
+echo "Installing prometheus..."
+helm install prometheus prometheus-community/prometheus --namespace prometheus
+handle_installation_error "prometheus"
 
 # Install tempo
 echo "Installing tempo..."
-helm install tempo grafana/tempo-distributed -n monitoring
+helm -n tempo install tempo grafana/tempo-distributed -f tempo_values.yaml
 handle_installation_error "tempo"
 
 # Install loki
 echo "Installing loki..."
-helm install loki grafana/loki -n monitoring
+helm upgrade --install --namespace loki logging grafana/loki -f loki_values.yaml --set loki.auth_enabled=false
 handle_installation_error "loki"
+
+# Install Grafana
+echo "Installing Grafana..."
+helm upgrade --install --namespace=loki loki-grafana grafana/grafana
+handle_installation_error "grafana"
+
+# Install otel
+echo "Installing otel..."
+helm install otel-collector open-telemetry/opentelemetry-collector \
+--namespace otel \
+-f otel_values.yaml
+handle_installation_error "otel"
 
 # Port-forward Grafana service
 echo "Setting up port-forwarding for Grafana..."
-kubectl port-forward -n monitoring service/kube-prometheus-grafana 80
+sudo kubectl port-forward --namespace loki service/loki-grafana 3000:80 &
+sudo kubectl port-forward service/prometheus-server 80 -n prometheus &
 
 echo "All installations and port-forwarding completed successfully."
+
