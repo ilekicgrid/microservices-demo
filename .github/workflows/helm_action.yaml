@@ -17,7 +17,7 @@ jobs:
       - name: Set up GCP Cloud SDK
         uses: google-github-actions/setup-gcloud@v0.2.0
         with:
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          service_account_key: ${{ secrets.GD_GCP_GRIDU_DEVOPS_T1_T2 }}
           project_id: ${{ secrets.GCP_PROJECT }}
 
       # Set up Kubernetes CLI (kubectl)
@@ -31,7 +31,7 @@ jobs:
       # Load Kubernetes config from GCP
       - name: Load Kubernetes config
         run: |
-          gcloud container clusters get-credentials YOUR_CLUSTER_NAME --zone YOUR_CLUSTER_ZONE --project ${{ secrets.GCP_PROJECT }}
+          gcloud container clusters get-credentials ${{ secrets.CLUSTER_NAME }} --zone ${{ secrets.CLUSTER_ZONE }} --project ${{ secrets.GCP_PROJECT }}
 
       # Deploy to Kubernetes
       - name: Deploy to Kubernetes
