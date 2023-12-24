@@ -19,9 +19,7 @@ jobs:
 
       # Build image
       - name: Build image
-        env:
-          DOCKER_BUILDKIT: 1
-        run: docker build -t ${{ secrets.DOCKER_IMAGE_NAME }} deploy/VIV
+        run: docker build -t ${{ secrets.DOCKER_IMAGE_NAME }} -f deploy/VIV/Dockerfile .
         
 
       # Authenticate with GCP
