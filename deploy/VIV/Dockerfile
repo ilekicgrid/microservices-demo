@@ -10,7 +10,7 @@ RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -
     && mv ./kubectl /usr/local/bin/
 
 # Install Helm
-RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | /bin/bash
+RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 
 
   # Add your script to the container
 COPY ../../Terraform/setup_cluster.sh /usr/local/bin/setup_cluster.sh
