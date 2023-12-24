@@ -20,6 +20,7 @@ jobs:
 
       - name: Authenticate with GCP
         run: |
+          cd Terraform
           echo "$GCP_SA_KEY" > gcp-key.json
           terraform init
           terraform apply -auto-approve
