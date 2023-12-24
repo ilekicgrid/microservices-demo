@@ -18,7 +18,7 @@ handle_installation_error() {
 }
 
 # Apply sock-shop
-#kubectl apply sock-shop.yaml
+kubectl apply sock-shop.yaml
 
 # Create namespaces
 kubectl create namespace loki
