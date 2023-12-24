@@ -21,7 +21,7 @@ jobs:
       - name: Build image
         env:
           DOCKER_BUILDKIT: 1
-        run: docker build -t ${{secrets.DOCKER_IMAGE_NAME}} ${{secrets.$DOCKER_IMAGE_DIR}}
+        run: docker build -t ${{ secrets.DOCKER_IMAGE_NAME }} ${{ secrets.DOCKER_IMAGE_DIR }}
 
       # Authenticate with GCP
       - name: Set up GCP Cloud SDK
