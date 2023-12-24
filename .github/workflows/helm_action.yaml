@@ -20,6 +20,14 @@ jobs:
           service_account_key: ${{ secrets.GD_GCP_GRIDU_DEVOPS_T1_T2 }}
           project_id: ${{ secrets.GCP_PROJECT }}
 
+      # Install gke-gcloud-auth-plugin
+      - name: Install gke-gcloud-auth-plugin
+        run: gcloud components install kubectl-gke
+
+      # Configure kubectl with GKE credentials
+      - name: Configure kubectl with GKE credentials
+        run: gcloud container clusters get-credentials <YOUR_CLUSTER_NAME> --zone <YOUR_CLUSTER_ZONE> --project <YOUR_GCP_PROJECT>
+
       # Set up Kubernetes CLI (kubectl)
       - name: Set up Kubernetes CLI (kubectl)
         uses: azure/setup-kubectl@v1
