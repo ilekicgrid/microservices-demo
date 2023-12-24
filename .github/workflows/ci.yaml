@@ -3,7 +3,7 @@ name: vivalabuilda
 on:
   push:
     branches:
-      - "*"  # run for branches
+    # - "*"  # run for branches
     tags:
       - "*"  # run for tags
 

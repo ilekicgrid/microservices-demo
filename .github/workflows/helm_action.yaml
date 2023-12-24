@@ -1,4 +1,4 @@
-name: vivalabuilda-and-deploy
+name: helm_action
 
 on:
   push:
