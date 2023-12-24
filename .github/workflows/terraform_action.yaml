@@ -22,7 +22,7 @@ jobs:
         run: |
           cd Terraform
           echo "$GCP_SA_KEY" > gcp-key.json
-          terraform init
+          terraform init --reconfigure
           terraform apply -auto-approve
         env:
           GCP_SA_KEY: ${{ secrets.GD_GCP_GRIDU_DEVOPS_T1_T2 }}
