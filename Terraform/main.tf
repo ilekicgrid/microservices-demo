@@ -1,6 +1,5 @@
 # Authenticate with GCP
 provider "google" {
-  credentials = file("/Users/vdjurovic/Downloads/GCP_Keys/gd-gcp-gridu-devops-t1-t2-8f6b8b5512c0.json")
   project     = "gd-gcp-gridu-devops-t1-t2"
   region      = "us-central1"
 }
