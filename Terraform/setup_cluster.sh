@@ -17,6 +17,9 @@ handle_installation_error() {
     fi
 }
 
+# Apply sock-shop
+#kubectl apply sock-shop.yaml
+
 # Create namespaces
 kubectl create namespace loki
 kubectl create namespace tempo
