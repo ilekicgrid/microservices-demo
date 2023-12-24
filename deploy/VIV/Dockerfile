@@ -4,12 +4,12 @@ FROM alpine:latest
   # Install bash, curl, and other necessary tools
 RUN apk add --no-cache bash curl
 
-  # Install kubectl
-RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" \
-&& chmod +x kubectl \
-&& mv kubectl /usr/local/bin/
+# Install kubectl
+RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl" \
+    && chmod +x ./kubectl \
+    && mv ./kubectl /usr/local/bin/
 
-  # Install Helm
+# Install Helm
 RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
   # Add your script to the container
