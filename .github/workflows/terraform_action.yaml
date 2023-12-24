@@ -1,0 +1,39 @@
+name: GKE Cluster Creation
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.1.0
+
+      - name: Authenticate with GCP
+        run: |
+          echo "$GCP_SA_KEY" > gcp-key.json
+          terraform init
+          terraform apply -auto-approve
+        env:
+          GCP_SA_KEY: ${{ secrets.GD_GCP_GRIDU_DEVOPS_T1_T2 }}
+
+      - name: Save GKE Cluster Information
+        id: cluster_info
+        run: |
+          echo "::set-output name=cluster-name::$(terraform output cluster_name)"
+          echo "::set-output name=cluster-zone::$(terraform output cluster_zone)"
+        shell: bash
+
+      - name: Use GKE Cluster Information
+        run: |
+          echo "Cluster Name: ${{ steps.cluster_info.outputs.cluster-name }}"
+          echo "Cluster Zone: ${{ steps.cluster_info.outputs.cluster-zone }}"
