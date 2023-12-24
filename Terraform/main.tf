@@ -11,9 +11,6 @@ resource "google_container_cluster" "vdjurovic_cluster" {
   location = "us-central1"
   deletion_protection = false
   initial_node_count = 1
-  cluster_autoscaling {
-    enabled = false
-  }
   #remove_default_node_pool = true
 }
 
