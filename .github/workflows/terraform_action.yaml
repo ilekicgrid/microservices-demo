@@ -8,7 +8,9 @@ on:
 jobs:
   terraform:
     runs-on: ubuntu-latest
-
+    env:
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcp-key.json
+      TF_DIR: ${{ secrets.TF_DIR }}  # Assuming TF_DIR is defined in your secrets
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -18,28 +20,28 @@ jobs:
         with:
           terraform_version: 1.1.0
 
-#      - name: Authenticate with GCP
-#        run: |
-#          cd Terraform
-#          echo "$GCP_SA_KEY" > gcp-key.json
-#          export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/gcp-key.json
-#        env:
-#          GCP_SA_KEY: ${{ secrets.GD_GCP_GRIDU_DEVOPS_T1_T2 }}
+      - name: Authenticate with GCP
+        run: |
+          echo "${{ secrets.GD_GCP_GRIDU_DEVOPS_T1_T2 }}" > $GOOGLE_APPLICATION_CREDENTIALS
 
       - name: Initialize Terraform
-        run: |
-          cd Terraform
-          echo "$GCP_SA_KEY" > gcp-key.json
-          export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/gcp-key.json 
-          terraform -chdir=${{ secrets.TF_DIR }} init --reconfigure
-        env:
-          GCP_SA_KEY: ${{ secrets.GD_GCP_GRIDU_DEVOPS_T1_T2 }}
+        run: terraform -chdir=$TF_DIR init --reconfigure
 
       - name: Format Terraform Code
-        run: terraform -chdir=${{ secrets.TF_DIR }} fmt
+        run: terraform -chdir=$TF_DIR fmt
 
       - name: Terraform Plan
-        run: terraform -chdir=${{ secrets.TF_DIR }} plan'
+        run: terraform -chdir=$TF_DIR plan
 
       - name: Apply Terraform
-        run: terraform -chdir=${{ secrets.TF_DIR }} apply -auto-approve
+        run: terraform -chdir=$TF_DIR apply -auto-approve
+#
+#      - name: Save GKE Cluster Information
+#        run: |
+#          echo "cluster-name=$(terraform -chdir=$TF_DIR output -raw cluster_name)" >> $GITHUB_ENV
+#          echo "cluster-zone=$(terraform -chdir=$TF_DIR output -raw cluster_zone)" >> $GITHUB_ENV
+#
+#      - name: Use GKE Cluster Information
+#        run: |
+#          echo "Cluster Name: ${{ env.cluster-name }}"
+#          echo "Cluster Zone: ${{ env.cluster-zone }}"
