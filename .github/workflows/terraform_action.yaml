@@ -25,16 +25,16 @@ jobs:
           echo "${{ secrets.GD_GCP_GRIDU_DEVOPS_T1_T2 }}" > $GOOGLE_APPLICATION_CREDENTIALS
 
       - name: Initialize Terraform
-        run: terraform -chdir=$TF_DIR init --reconfigure
-
-      - name: Format Terraform Code
-        run: terraform -chdir=$TF_DIR fmt
-
-      - name: Terraform Plan
-        run: terraform -chdir=$TF_DIR plan
-
-      - name: Apply Terraform
-        run: terraform -chdir=$TF_DIR apply -auto-approve
+        run: terraform -chdir='/Terraform' init --reconfigure
+#
+#      - name: Format Terraform Code
+#        run: terraform -chdir=$TF_DIR fmt
+#
+#      - name: Terraform Plan
+#        run: terraform -chdir=$TF_DIR plan
+#
+#      - name: Apply Terraform
+#        run: terraform -chdir=$TF_DIR apply -auto-approve
 #
 #      - name: Save GKE Cluster Information
 #        run: |
