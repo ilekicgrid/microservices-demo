@@ -27,7 +27,11 @@ jobs:
           GCP_SA_KEY: ${{ secrets.GD_GCP_GRIDU_DEVOPS_T1_T2 }}
 
       - name: Initialize Terraform
-        run: terraform -chdir=${{ secrets.TF_DIR }} init --reconfigure
+        run: |
+          cd Terraform
+          echo "$GCP_SA_KEY" > gcp-key.json
+          export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/gcp-key.json 
+          terraform -chdir=${{ secrets.TF_DIR }} init --reconfigure        
 
       - name: Format Terraform Code
         run: terraform -chdir=${{ secrets.TF_DIR }} fmt
