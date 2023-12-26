@@ -27,22 +27,16 @@ jobs:
           GCP_SA_KEY: ${{ secrets.GD_GCP_GRIDU_DEVOPS_T1_T2 }}
 
       - name: Initialize Terraform
-        run: |
-          cd Terraform
-          'terraform chdir=${{ secrets.TF_DIR }} init --reconfigure'
+        run: terraform -chdir=${{ secrets.TF_DIR }} init --reconfigure
 
       - name: Format Terraform Code
-        run: |
-          cd Terraform
-          'terraform -chdir=${{ secrets.TF_DIR }} fmt'
+        run: terraform -chdir=${{ secrets.TF_DIR }} fmt
 
       - name: Terraform Plan
-        run: |
-          cd Terraform 
-          'terraform chdir=${{ secrets.TF_DIR }} plan'
+        run: terraform -chdir=${{ secrets.TF_DIR }} plan'
 
       - name: Apply Terraform
-        run: 'terraform chdir=${{ secrets.TF_DIR }} apply -auto-approve'
+        run: terraform -chdir=${{ secrets.TF_DIR }} apply -auto-approve
 
       - name: Save GKE Cluster Information
         id: cluster_info
