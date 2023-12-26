@@ -18,31 +18,17 @@ jobs:
         with:
           terraform_version: 1.1.0
 
-      - name: Authenticate with GCP
+      - name: Authenticate with GCP && TF Checks
         run: |
           cd Terraform
           echo "$GCP_SA_KEY" > gcp-key.json
           export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/gcp-key.json
+          terraform init --reconfigure
+          terraform fmt -check
+          terraform plan
+          terraform apply -auto-approve
         env:
           GCP_SA_KEY: ${{ secrets.GD_GCP_GRIDU_DEVOPS_T1_T2 }}
-
-      - name: Initialize Terraform
-        run: |
-          cd Terraform
-          terraform init --reconfigure
-
-      - name: Format Terraform Code
-        run: |
-          cd Terraform
-          terraform fmt -check
-
-      - name: Terraform Plan
-        run: |
-          cd Terraform 
-          terraform plan
-
-      - name: Apply Terraform
-        run: terraform apply -auto-approve
 
       - name: Save GKE Cluster Information
         id: cluster_info
