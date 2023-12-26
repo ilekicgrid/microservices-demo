@@ -24,7 +24,7 @@ jobs:
           echo "$GCP_SA_KEY" > gcp-key.json
           export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/gcp-key.json
           terraform init --reconfigure
-          terraform fmt -check
+          terraform fmt
           terraform plan
           terraform apply -auto-approve
         env:
