@@ -73,10 +73,11 @@ jobs:
           kubectl create namespace otel || true
           
           # Add helm repos
+          helm init
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
           helm repo add grafana https://grafana.github.io/helm-charts
           helm repo update
-          helm init
+          
           
 
           # Install prometheus
