@@ -1,9 +1,9 @@
 name: Cluster Destroy NP && PR
-
-on:
-  push:
-    branches:
-      - master
+#
+#on:
+#  push:
+#    branches:
+#      - master
 
 jobs:
   terraform:
