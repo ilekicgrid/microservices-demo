@@ -1,6 +1,6 @@
 terraform {
   backend "gcs" {
-    bucket = "viv_bucket"
+    bucket = "viv_bucket_np"
     prefix = "terraform/state"
   }
 }
