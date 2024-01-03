@@ -31,7 +31,7 @@ jobs:
         run: terraform -chdir=${{ secrets.TF_DIR_PR}} init --reconfigure
 
       - name: Unlock Terraform
-        run: terraform -chdir=${{ secrets.TF_DIR_NP }} force-unlock 1704313567329660
+        run: terraform -chdir=${{ secrets.TF_DIR_NP }} force-unlock 1704313567329660 -y
 
       - name: Initialize Terraform
         run: terraform -chdir=${{ secrets.TF_DIR_NP }} destroy --auto-approve
