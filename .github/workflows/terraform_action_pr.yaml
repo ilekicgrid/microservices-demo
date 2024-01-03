@@ -43,7 +43,7 @@ name: GKE Cluster Creation PR
 on:
   push:
     branches:
-      - "*"  # run for all branches
+    #  - "*"  # run for all branches
 
 jobs:
   terraform:
