@@ -54,7 +54,6 @@ jobs:
   permissions:
     contents: read
     pull-requests: write
-    #url: ${{ steps.deploy.outputs.deployment-url }}
 
     steps:
       - name: Checkout Repository
