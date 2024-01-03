@@ -52,7 +52,7 @@ jobs:
 
       # Actual deployment step that applies the Terraform plan
       - name: Apply Terraform
-        if: github.ref != 'refs/heads/master'
+        if: github.ref == 'refs/heads/master'
         run: terraform -chdir=${{ secrets.TF_DIR_PR }} apply -auto-approve tfplan
 
 
