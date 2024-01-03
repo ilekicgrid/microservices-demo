@@ -13,7 +13,7 @@ resource "google_container_cluster" "vdjurovic_cluster_pr" {
   #remove_default_node_pool = true
 }
 resource "google_storage_bucket" "terraform_state" {
-  name          = "viv_bucket"
+  name          = "viv_bucket_pr"
   location      = "US"
   force_destroy = true
 
