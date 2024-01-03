@@ -1,49 +1,9 @@
 name: GKE Cluster Creation PR
-
-on:
-  push:
-    branches:
-      - master
-
-jobs:
-  terraform:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 1.1.0
-
-
-      - name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v1'
-        with:
-          credentials_json: '${{ secrets.GD_GCP_GRIDU_DEVOPS_T1_T2 }}'
-
-      - name: Initialize Terraform
-        run: terraform -chdir=${{ secrets.TF_DIR_PR }} init --reconfigure
-
-      - name: Format Terraform Code
-        run: terraform -chdir=${{ secrets.TF_DIR_PR }} fmt
-
-      - name: Terraform Plan
-        run: terraform -chdir=${{ secrets.TF_DIR_PR }} plan
-
-      - name: Apply Terraform
-        run: terraform -chdir=${{ secrets.TF_DIR_PR }} apply -auto-approve
-
-
-
-
 #
 #on:
 #  push:
 #    branches:
-#    #  - master  # run only on master branch for production
+#      - master
 #
 #jobs:
 #  terraform:
@@ -58,35 +18,75 @@ jobs:
 #        with:
 #          terraform_version: 1.1.0
 #
+#
 #      - name: 'Authenticate to Google Cloud'
 #        uses: 'google-github-actions/auth@v1'
 #        with:
 #          credentials_json: '${{ secrets.GD_GCP_GRIDU_DEVOPS_T1_T2 }}'
 #
 #      - name: Initialize Terraform
-#        run: terraform -chdir=${{ secrets.TF_DIR }} init --reconfigure
+#        run: terraform -chdir=${{ secrets.TF_DIR_PR }} init --reconfigure
 #
 #      - name: Format Terraform Code
-#        run: terraform -chdir=${{ secrets.TF_DIR }} fmt
+#        run: terraform -chdir=${{ secrets.TF_DIR_PR }} fmt
 #
 #      - name: Terraform Plan
-#        run: terraform -chdir=${{ secrets.TF_DIR }} plan -out=tfplan
+#        run: terraform -chdir=${{ secrets.TF_DIR_PR }} plan
 #
-#      # Outputs the plan data for manual review
-#      - name: Output Terraform Plan Result
-#        run: |
-#          echo "Terraform plan output:"
-#          terraform show tfplan
-#
-#      # This step will pause the workflow and wait for a manual approval if it's not the master branch.
-#      - name: Wait for Manual Approval
-#        if: github.ref != 'refs/heads/master'
-#        run: echo "Waiting for manual approval of the Terraform plan."
-#
-#      # Actual deployment step that applies the Terraform plan
 #      - name: Apply Terraform
-#        if: github.ref != 'refs/heads/master'
-#        run: terraform -chdir=${{ secrets.TF_DIR }} apply -auto-approve tfpla
+#        run: terraform -chdir=${{ secrets.TF_DIR_PR }} apply -auto-approve
+
+
+
+
+
+on:
+  push:
+    branches:
+      - "*"  # run for all branches
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.1.0
+
+      - name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GD_GCP_GRIDU_DEVOPS_T1_T2 }}'
+
+      - name: Initialize Terraform
+        run: terraform -chdir=${{ secrets.TF_DIR_PR }} init --reconfigure
+
+      - name: Format Terraform Code
+        run: terraform -chdir=${{ secrets.TF_DIR_PR }} fmt
+
+      - name: Terraform Plan
+        run: terraform -chdir=${{ secrets.TF_DIR_PR }} plan -out=tfplan
+
+      # Outputs the plan data for manual review
+      - name: Output Terraform Plan Result
+        run: |
+          echo "Terraform plan output:"
+          terraform show tfplan
+
+      # This step will pause the workflow and wait for a manual approval if it's not the master branch.
+      - name: Wait for Manual Approval
+        if: github.ref == 'refs/heads/master'
+        run: echo "Waiting for manual approval of the Terraform plan."
+
+      # Actual deployment step that applies the Terraform plan
+      - name: Apply Terraform
+        if: github.ref != 'refs/heads/master'
+        run: terraform -chdir=${{ secrets.TF_DIR_PR }} apply -auto-approve tfplan
 
 
 
