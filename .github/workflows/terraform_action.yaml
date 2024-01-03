@@ -1,4 +1,4 @@
-name: GKE Cluster Creation
+name: GKE Cluster Creation NP
 
 on:
   push:
@@ -25,15 +25,15 @@ jobs:
           credentials_json: '${{ secrets.GD_GCP_GRIDU_DEVOPS_T1_T2 }}'
 
       - name: Initialize Terraform
-        run: terraform -chdir=${{ secrets.TF_DIR }} init --reconfigure
+        run: terraform -chdir=${{ secrets.TF_DIR_NP }} init --reconfigure
 
       - name: Format Terraform Code
-        run: terraform -chdir=${{ secrets.TF_DIR }} fmt
+        run: terraform -chdir=${{ secrets.TF_DIR_NP }} fmt
 
       - name: Terraform Plan
-        run: terraform -chdir=${{ secrets.TF_DIR }} plan
+        run: terraform -chdir=${{ secrets.TF_DIR_NP }} plan
 
       - name: Apply Terraform
-        run: terraform -chdir=${{ secrets.TF_DIR }} apply -auto-approve
+        run: terraform -chdir=${{ secrets.TF_DIR_NP }} apply -auto-approve
 
 

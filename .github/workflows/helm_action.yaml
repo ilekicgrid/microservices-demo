@@ -2,7 +2,7 @@ name: helm_action
 
 on:
   workflow_run:
-    workflows: ["GKE Cluster Creation"]
+    workflows: ["GKE Cluster Creation NP"]
     types:
       - completed
     branches:
