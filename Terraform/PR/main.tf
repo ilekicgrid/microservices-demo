@@ -5,8 +5,8 @@ provider "google" {
 }
 
 # Create a GKE cluster with zero initial nodes
-resource "google_container_cluster" "vdjurovic_cluster" {
-  name     = "vdjurovic-cluster"
+resource "google_container_cluster" "vdjurovic_cluster_pr" {
+  name     = "vdjurovic-cluster-pr"
   location = "us-central1"
   deletion_protection = false
   initial_node_count = 1

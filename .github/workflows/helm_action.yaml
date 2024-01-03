@@ -6,9 +6,9 @@ on:
     types:
       - completed
     branches:
-      #- "*"  # run for all branches
+      - "*"  # run for all branches
     tags:
-      #- "*"  # run for all tags
+      - "*"  # run for all tags
 
 jobs:
   deploy-to-kubernetes:

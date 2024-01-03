@@ -13,7 +13,7 @@ RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -
 RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 
   # Add your script to the container
-COPY ../../Terraform/setup_cluster.sh /usr/local/bin/setup_cluster.sh
+COPY ../../Terraform/NP/setup_cluster.sh /usr/local/bin/setup_cluster.sh
 RUN chmod +x /usr/local/bin/setup_cluster.sh
 
   # Set the entry point to your script
