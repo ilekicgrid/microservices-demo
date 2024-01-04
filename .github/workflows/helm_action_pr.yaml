@@ -96,7 +96,7 @@ jobs:
 
           # Install Grafana
           echo "Installing Grafana..."
-          helm upgrade --install --namespace=loki loki-grafana grafana/grafana || handle_installation_error "grafana"
+          helm upgrade --install --namespace=loki loki-grafana grafana/grafana --set service.type=LoadBalancer || handle_installation_error "grafana"
 
           # Install otel
           echo "Installing otel..."
