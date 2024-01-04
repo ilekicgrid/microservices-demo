@@ -28,7 +28,7 @@ resource "google_container_node_pool" "vdjurovic_autoscaling_node_pool" {
     preemptible  = false
     machine_type = "e2-medium"
     disk_size_gb = 150
-    image_type   = "UBUNTU"
+    #image_type   = "UBUNTU"
 
     # Additional configurations can be added here
   }

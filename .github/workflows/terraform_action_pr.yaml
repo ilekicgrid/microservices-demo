@@ -54,28 +54,3 @@ jobs:
       - name: Apply Terraform
         if: github.ref == 'refs/heads/master'
         run: terraform -chdir=${{ secrets.TF_DIR_PR }} apply -auto-approve tfplan
-
-
-
-#      - name: Upload Terraform Plan
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: terraform-plan
-#          path: tfplan
-#
-#      - name: Manual Approval for Apply
-#        uses: actions/github-script@0.9.0
-#        with:
-#          script: |
-#            const issue = await github.issues.create({
-#              owner: context.repo.owner,
-#              repo: context.repo.repo,
-#              title: 'Terraform Apply Approval Required',
-#              body: 'Please review the Terraform plan and approve.'
-#            });
-#            console.log('Issue created: ' + issue.data.html_url);
-#
-#      - name: Apply Terraform
-#        run: terraform -chdir=${{ secrets.TF_DIR }} apply tfplan
-#        if: github.event.issue.comment.body == 'approve'
-
