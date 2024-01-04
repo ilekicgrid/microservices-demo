@@ -44,7 +44,7 @@ jobs:
         run: |
           #!/bin/bash
           
-          cd Terraform
+          cd Terraform/PR
 
           # Function to handle failure based on specific error message
           handle_installation_error() {
