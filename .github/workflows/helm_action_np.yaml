@@ -83,22 +83,22 @@ jobs:
 
           # Install prometheus
           echo "Installing prometheus..."
-          helm install prometheus prometheus-community/prometheus --namespace prometheus || handle_installation_error "prometheus"
+          helm install prometheus prometheus-community/prometheus --namespace prometheus 
 
           # Install tempo
           echo "Installing tempo..."
-          helm -n tempo install tempo grafana/tempo-distributed -f tempo_values.yaml || handle_installation_error "tempo"
+          helm -n tempo install tempo grafana/tempo-distributed -f tempo_values.yaml 
 
           # Install loki
           echo "Installing loki..."
-          helm upgrade --install --namespace loki logging grafana/loki -f loki_values.yaml --set loki.auth_enabled=false || handle_installation_error "loki"
+          helm upgrade --install --namespace loki logging grafana/loki -f loki_values.yaml --set loki.auth_enabled=false 
 
           # Install Grafana
           echo "Installing Grafana..."
-          helm upgrade --install --namespace=loki loki-grafana grafana/grafana || handle_installation_error "grafana"
+          helm upgrade --install --namespace=loki loki-grafana grafana/grafana 
 
           # Install otel
           echo "Installing otel..."
-          helm install otel-collector open-telemetry/opentelemetry-collector --namespace otel -f otel_values.yaml || handle_installation_error "otel"
+          helm install otel-collector open-telemetry/opentelemetry-collector --namespace otel -f otel_values.yaml 
 
           echo "All installations completed successfully."
