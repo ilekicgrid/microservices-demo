@@ -96,12 +96,12 @@ jobs:
           fi
 
           # Install Grafana
-          if ! check_helm_release loki-grafana loki; then
+#          if ! check_helm_release loki-grafana loki; then
               echo "Installing Grafana..."
               helm upgrade --install --namespace=loki loki-grafana grafana/grafana --set service.type=LoadBalancer 
-          else
-              echo "Grafana already installed, skipping..."
-          fi
+#          else
+#              echo "Grafana already installed, skipping..."
+#          fi
 
           # Install otel
           if ! check_helm_release otel-collector otel; then
