@@ -46,14 +46,23 @@ jobs:
         run: |
           #!/bin/bash
 
-          cd Terraform/NP
+          cd Terraform/PR
 
-          # Function to check if Helm release exists
-          check_helm_release() {
+          # Function to handle failure based on specific error message
+          handle_installation_error() {
               release_name=$1
-              namespace=$2
-              helm list --namespace $namespace | grep -q $release_name
-              return $?
+              if [[ $? -ne 0 ]]; then
+                  # Capture the error message
+                  error_message=$(helm install $release_name 2>&1)
+
+                  # Check if the error message is about re-using a name
+                  if echo $error_message | grep -q "cannot re-use a name that is still in use"; then
+                      echo "Warning: $release_name is already installed or in use. Continuing..."
+                  else
+                      echo "Error: Installation of $release_name failed. Exiting script."
+                      exit 1
+                  fi
+              fi
           }
 
           # Apply sock-shop
@@ -71,49 +80,31 @@ jobs:
           helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
           helm repo update
 
+
+
           # Install prometheus
-          if ! check_helm_release prometheus prometheus; then
-              echo "Installing prometheus..."
-              helm upgrade --install prometheus prometheus-community/prometheus --namespace prometheus
-          else
-              echo "Prometheus already installed, skipping..."
-          fi
+          echo "Installing prometheus..."
+          helm upgrade --install prometheus prometheus-community/prometheus --namespace prometheus || handle_installation_error "prometheus"
 
           # Install tempo
-          if ! check_helm_release tempo tempo; then
-              echo "Installing tempo..."
-              helm -n tempo upgrade --install tempo grafana/tempo-distributed -f tempo_values.yaml
-          else
-              echo "Tempo already installed, skipping..."
-          fi
+          echo "Installing tempo..."
+          helm -n tempo upgrade --install tempo grafana/tempo-distributed -f tempo_values.yaml || handle_installation_error "tempo"
 
           # Install loki
-          if ! check_helm_release logging loki; then
-              echo "Installing loki..."
-              helm upgrade --install --namespace loki logging grafana/loki -f loki_values.yaml --set loki.auth_enabled=false
-          else
-              echo "Loki already installed, skipping..."
-          fi
+          echo "Installing loki..."
+          helm upgrade --install --namespace loki logging grafana/loki -f loki_values.yaml --set loki.auth_enabled=false || handle_installation_error "loki"
 
           # Install Grafana
-#          if ! check_helm_release loki-grafana loki; then
-              echo "Installing Grafana..."
-              helm upgrade --install --namespace=loki loki-grafana grafana/grafana --set service.type=LoadBalancer 
-#          else
-#              echo "Grafana already installed, skipping..."
-#          fi
+          echo "Installing Grafana..."
+          helm upgrade --install --namespace=loki loki-grafana grafana/grafana --set service.type=LoadBalancer || handle_installation_error "grafana"
 
           # Install otel
-          if ! check_helm_release otel-collector otel; then
-              echo "Installing otel..."
-              helm upgrade --install otel-collector open-telemetry/opentelemetry-collector --namespace otel -f otel_values.yaml
-          else
-              echo "Otel already installed, skipping..."
-          fi
+          echo "Installing otel..."
+          helm upgrade --install otel-collector open-telemetry/opentelemetry-collector --namespace otel -f otel_values.yaml || handle_installation_error "otel"
 
           echo "All installations completed successfully."
           
-              # Retrieve Grafana admin password from Kubernetes secret
+      # Retrieve Grafana admin password from Kubernetes secret
 
       - name: Get Grafana Admin Password
         run: kubectl get secret --namespace loki loki-grafana -o jsonpath='{.data.admin-password}' | base64 --decode; echo
