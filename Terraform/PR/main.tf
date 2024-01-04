@@ -13,7 +13,7 @@ resource "google_container_cluster" "vdjurovic_cluster_pr" {
   #remove_default_node_pool = true
   enable_autopilot = true
 }
-# Create a node pool with horizontal autoscaling
+#Create a node pool with horizontal autoscaling
 #resource "google_container_node_pool" "vdjurovic_autoscaling_node_pool" {
 #  name       = "vdjurovic-autoscaling-node-pool"
 #  location   = "us-central1"
