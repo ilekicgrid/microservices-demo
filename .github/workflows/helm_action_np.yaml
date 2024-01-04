@@ -86,11 +86,11 @@ jobs:
 
           # Install prometheus
           echo "Installing prometheus..."
-          helm install prometheus prometheus-community/prometheus --namespace prometheus 
+          helm upgrade --install prometheus prometheus-community/prometheus --namespace prometheus 
 
           # Install tempo
           echo "Installing tempo..."
-          helm -n tempo install tempo grafana/tempo-distributed -f tempo_values.yaml 
+          helm -n tempo upgrade --install tempo grafana/tempo-distributed -f tempo_values.yaml 
 
           # Install loki
           echo "Installing loki..."
@@ -102,6 +102,6 @@ jobs:
 
           # Install otel
           echo "Installing otel..."
-          helm install otel-collector open-telemetry/opentelemetry-collector --namespace otel -f otel_values.yaml 
+          helm upgrade --install otel-collector open-telemetry/opentelemetry-collector --namespace otel -f otel_values.yaml 
 
           echo "All installations completed successfully."
