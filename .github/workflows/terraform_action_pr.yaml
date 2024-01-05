@@ -33,6 +33,9 @@ jobs:
       - name: Initialize Terraform
         run: terraform -chdir=${{ secrets.TF_DIR_PR }} init --reconfigure
 
+      - name: Unlock
+        run: terraform force-unlock 1704377993336786
+
       - name: Format Terraform Code
         run: terraform -chdir=${{ secrets.TF_DIR_PR }} fmt
 
