@@ -11,7 +11,7 @@ resource "google_container_cluster" "ilekic_cluster_np" {
   deletion_protection = false
   initial_node_count = 1
   #remove_default_node_pool = true
-  enable_autopilot = true
+#  enable_autopilot = true
 }
 # Create a node pool with horizontal autoscaling
 resource "google_container_node_pool" "ilekic_autoscaling_node_pool" {
